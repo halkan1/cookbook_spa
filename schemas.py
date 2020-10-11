@@ -16,6 +16,24 @@ class MyGetterDict(GetterDict):  # create a custom GetterDict to be able to add 
     def __setitem__(self, key, value):
         return setattr(self._obj, key, value)
 
+# Cooking int schemas
+class CookingUnitBase(CamelModel):
+    name: str
+    short: str
+    dimension: str
+    factor: float
+
+    class Config:
+        orm_mode = True
+
+class CookingUnit(CookingUnitBase):
+    # Read Operation
+    id: int
+
+class CookingUnitCreate(CookingUnitBase):
+    # Create Operation
+    pass
+
 # Ingredient Schemas
 class NutritionalValues(CamelModel):
     calories: PositiveInt

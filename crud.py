@@ -3,6 +3,21 @@ import models, schemas
 
 # Supporting functions
 
+# Cooking Unit table CRUD
+def get_unit(db: Session, unit_name: str):
+    return db.query(models.CookingUnit).filter(
+        models.CookingUnit.name == unit_name).first()
+
+def get_units(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.CookingUnit).offset(skip).limit(limit).all()
+
+def create_unit(db: Session, unit: schemas.CookingUnitCreate):
+    db_unit = models.CookingUnit(**unit.dict())
+    db.add(db_unit)
+    db.commit()
+    db.refresh(db_unit)
+    return db_unit
+
 # Ingredient table CRUD
 def get_ingredient(db: Session, ingredient_name: str):
     return db.query(models.Ingredient).filter(

@@ -16,6 +16,26 @@ def get_db():
     finally:
         db.close()
 
+# Cooking Unit Path Operations
+@app.get("/unit/", response_model=List[schemas.CookingUnit])
+def read_units(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    units = crud.get_units(db, skip=skip, limit=limit)
+    return units
+
+@app.get("/unit/{unit_name}", response_model=schemas.CookingUnit)
+def read_unit(unit_name: str, db: Session = Depends(get_db)):
+    db_unit = crud.get_unit(db, unit_name=unit_name)
+    if db_unit is None:
+        raise HTTPException(status_code=404, detail="Unit not found")
+    return db_unit
+
+@app.post("/unit/", response_model=schemas.CookingUnit)
+def create_unit(unit: schemas.CookingUnitCreate, db: Session = Depends(get_db)):
+    db_unit = crud.get_unit(db, unit_name=unit.name)
+    if db_unit:
+        raise HTTPException(status_code=400, detail="Unit already exists")
+    return crud.create_unit(db=db, unit=unit)
+
 # Ingredient Type Path Operations
 @app.get("/ingredienttype/", response_model=List[schemas.IngredientType])
 def read_ingredient_types(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):

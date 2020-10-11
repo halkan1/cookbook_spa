@@ -3,8 +3,16 @@ from sqlalchemy.orm import relationship
 
 from database import Base
 
+class CookingUnit(Base):
+    __tablename__ = "cooking_unit"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    short = Column(String, unique=True, index=True)
+    dimension = Column(String)
+    factor = Column(Float)
+
 class Ingredient(Base):
-    __tablename__ = "ingredients"
+    __tablename__ = "ingredient"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     calories = Column(Float)
