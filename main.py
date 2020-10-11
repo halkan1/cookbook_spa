@@ -52,6 +52,9 @@ def read_ingredient(ingredient_name: str, db: Session = Depends(get_db)):
 @app.post("/ingrendient/", response_model=schemas.Ingredient)
 def create_ingredient(ingredient: schemas.IngredientCreate, db: Session = Depends(get_db)):
     db_ingredient = crud.get_ingredient(db, ingredient_name=ingredient.name)
+    db_type = crud.get_ingredient_type_by_id(db, type_id=ingredient.ingredient_type_id)
     if db_ingredient:
         raise HTTPException(status_code=400, detail="Ingredient already exists")
+    if not db_type:
+        raise HTTPException(status_code=400, detail="Ingredient type does not exist")
     return crud.create_ingredient(db=db, ingredient=ingredient)

@@ -22,5 +22,4 @@ class IngredientType(Base):
     __tablename__ = "ingredient_type"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-    #ingredients = relationship("Ingredient", backref="type", lazy='dynamic')
     ingredients = relationship("Ingredient", back_populates="ingredient_type")
