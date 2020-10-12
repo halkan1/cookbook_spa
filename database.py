@@ -8,6 +8,7 @@ engine = create_engine(
         "check_same_thread": Config.CHECK_SAME_THREAD
     }
 )
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

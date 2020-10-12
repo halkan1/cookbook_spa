@@ -26,6 +26,13 @@ class CookingUnitBase(CamelModel):
     class Config:
         orm_mode = True
 
+    @validator('dimension')
+    def valid_units_only(cls, v):
+        choices = {"mass", "volume"}
+        if v not in choices:
+            raise ValueError(f"Must be either {' or '.join(choices)}")
+        return v
+
 class CookingUnit(CookingUnitBase):
     # Read Operation
     id: int
@@ -66,7 +73,7 @@ class Ingredient(IngredientBase):
     
     @root_validator(pre=True)
     def nest_nutritional_values(cls, values):
-        values['nutritional_values'] = NutritionalValues(**values)  # enjoy :)
+        values["nutritional_values"] = NutritionalValues(**values)  # enjoy :)
         return values
 
 class IngredientSubQuery(CamelModel):
