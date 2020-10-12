@@ -55,4 +55,15 @@ def create_ingredient_type(db: Session, ingredient_type: schemas.IngredientTypeC
     db.refresh(db_type)
     return db_type
 
+def update_ingredient_type(db: Session, type_name: str, new_name: schemas.IngredientTypeUpdate):
+    db_type = db.query(models.IngredientType).filter(
+        models.IngredientType.name == type_name).first()
+    db_type.name = new_name.name
+    db.commit()
+    return db_type
 
+def delete_ingredient_type(db: Session, type_name: str):
+    db_type = db.query(models.IngredientType).filter(
+        models.IngredientType.name == type_name).first()
+    db.delete(db_type)
+    db.commit()

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Schema, root_validator, validator, PositiveInt
+from pydantic import BaseModel, Schema, root_validator, validator, conint
 from pydantic.utils import GetterDict
 from typing import Optional, List, Dict
 
@@ -43,19 +43,20 @@ class CookingUnitCreate(CookingUnitBase):
 
 # Ingredient Schemas
 class NutritionalValues(CamelModel):
-    calories: PositiveInt
-    saturated_fat: PositiveInt
-    trans_fat: PositiveInt
-    cholesterol: PositiveInt
-    sodium: PositiveInt
-    carbohydrate: PositiveInt
-    sugar: PositiveInt
-    protein: PositiveInt         
+    calories: conint(gt=-1)
+    saturated_fat: conint(gt=-1)
+    trans_fat: conint(gt=-1)
+    cholesterol: conint(gt=-1)
+    sodium: conint(gt=-1)
+    carbohydrate: conint(gt=-1)
+    sugar: conint(gt=-1)
+    protein: conint(gt=-1)
 
 class IngredientBase(CamelModel):
     name: str
-    ingredient_type_id: int
-    nutritional_values: NutritionalValues
+    ingredient_type_id: int = None
+    #ingredient_type: str = None
+    nutritional_values: Optional[NutritionalValues] = None
     
     class Config:
         orm_mode = True
@@ -88,6 +89,9 @@ class IngredientSubQuery(CamelModel):
 class IngredientTypeBase(CamelModel):
     name: str
 
+    class Config:
+        orm_mode = True
+
 class IngredientTypeCreate(IngredientTypeBase):
     # Create Operation
     pass
@@ -97,5 +101,6 @@ class IngredientType(IngredientTypeBase):
     id: int
     ingredients: List[IngredientSubQuery] = []
 
-    class Config:
-        orm_mode = True
+class IngredientTypeUpdate(IngredientTypeBase):
+    # Update Operation
+    pass

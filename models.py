@@ -23,7 +23,7 @@ class Ingredient(Base):
     carbohydrate = Column(Float)
     sugar = Column(Float)
     protein = Column(Float)
-    ingredient_type_id = Column(Integer, ForeignKey("ingredient_type.id"))
+    ingredient_type_id = Column(Integer, ForeignKey("ingredient_type.id", ondelete='SET NULL'))
     ingredient_type = relationship("IngredientType", back_populates="ingredients")
 
 class IngredientType(Base):
