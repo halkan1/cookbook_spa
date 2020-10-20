@@ -54,8 +54,8 @@ class NutritionalValues(CamelModel):
 
 class IngredientBase(CamelModel):
     name: str
-    ingredient_type_id: int = None
-    #ingredient_type: str = None
+    #ingredient_type_id: int = None
+    category: str = None
     nutritional_values: Optional[NutritionalValues] = None
     
     class Config:

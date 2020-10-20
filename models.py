@@ -1,5 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from database import Base
 
@@ -25,6 +26,12 @@ class Ingredient(Base):
     protein = Column(Float)
     ingredient_type_id = Column(Integer, ForeignKey("ingredient_type.id", ondelete='SET NULL'))
     ingredient_type = relationship("IngredientType", back_populates="ingredients")
+
+    @hybrid_property
+    def category(self):
+        if self.ingredient_type:
+            return self.ingredient_type.name
+        return None
 
 class IngredientType(Base):
     __tablename__ = "ingredient_type"

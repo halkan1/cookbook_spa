@@ -27,9 +27,12 @@ def get_ingredients(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Ingredient).offset(skip).limit(limit).all()
 
 def create_ingredient(db: Session, ingredient: schemas.IngredientCreate):
+    if ingredient.category:
+        db_type = db.query(models.IngredientType).filter(
+            models.IngredientType.name == ingredient.category).first()
     db_ingredient = models.Ingredient(
         name=ingredient.name,
-        ingredient_type_id=ingredient.ingredient_type_id, 
+        ingredient_type_id=[db_type.id if ingredient.category else None][0], 
         **ingredient.nutritional_values.dict())
     db.add(db_ingredient)
     db.commit()

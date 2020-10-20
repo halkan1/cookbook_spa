@@ -88,10 +88,10 @@ def read_ingredient(ingredient_name: str, db: Session = Depends(get_db)):
 def create_ingredient(ingredient: schemas.IngredientCreate, db: Session = Depends(get_db)):
     # Make this take a string for ingredient type
     db_ingredient = crud.get_ingredient(db=db, ingredient_name=ingredient.name)
-    db_type = crud.get_ingredient_type_by_id(db, type_id=ingredient.ingredient_type_id)
-    #db_type = get_ingredient_type(db,)
+    #db_type = crud.get_ingredient_type_by_id(db=db, type_id=ingredient.ingredient_type_id)
+    db_type = crud.get_ingredient_type(db=db, type_name=ingredient.category)
     if db_ingredient:
         raise HTTPException(status_code=400, detail="Ingredient already exists")
-    if not db_type:
+    if ingredient.category and not db_type:
         raise HTTPException(status_code=404, detail="Ingredient type not found")
     return crud.create_ingredient(db=db, ingredient=ingredient)
